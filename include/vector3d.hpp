@@ -142,6 +142,7 @@ class vector3d {
         else
             return 7;
     }
+    //Add 
     private:
     double _x,_y,_z;
 };

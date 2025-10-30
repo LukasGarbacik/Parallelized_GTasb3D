@@ -24,6 +24,7 @@ class fdmnode{ /* contain the whole node used in one simulation */
         double df_ice_delta_sum[NVOLATILE]; /* accumulative ice consumption within a time period to ensure bf_ice_delta_sum >1e-12f_i for numerical accuracy  */
         double dr_upper, dr_lower;  /* spacing between the 1D node */
         vector3d vPos; /* position */
+        vector3d scaled_vPos;
         vector3d norm_surf0; /* surface normal direction for 1D node */
         vector3d vFlux_gas_all[NVOLATILE]; /* mean gas diffusion mass flux rate during nDelta_all (3D) */
         vector3d vFlux_gas_t[NVOLATILE];
@@ -101,6 +102,13 @@ class fdmnode{ /* contain the whole node used in one simulation */
         double Flux_gas3Dy(unsigned int i) const {return vFlux_gas_all[i].y();}
         double & Flux_gas3Dz(unsigned int i) {return vFlux_gas_all[i].z();}
         double Flux_gas3Dz(unsigned int i) const {return vFlux_gas_all[i].z();}
+
+        void set_scaled_pos(double x, double y, double z){
+            scaled_vPos = vector3d(x,y,z);
+        }
+        double get_scaled_X() const {return scaled_vPos.x();}
+        double get_scaled_Y() const {return scaled_vPos.y();}
+        double get_scaled_Z() const {return scaled_vPos.z();}
 };
 
 #endif /* fdmnode_hpp */

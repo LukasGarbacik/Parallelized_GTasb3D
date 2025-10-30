@@ -47,7 +47,7 @@ using namespace myconstants;
 
 
 /* define compile setup */
-#define USE_GAS  /* turn on gas and ice activity */
+//#define USE_GAS  /* turn on gas and ice activity */
 //#define USE_SELF /* include self-shadow and self-heating */
 #define SEETIME      /* set the parameter when need to estimate the computation time */
 

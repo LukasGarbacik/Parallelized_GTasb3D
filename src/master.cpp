@@ -797,7 +797,7 @@ bool Master::InitSystem(const string & Filename){
     /************************/
     double dr1, dr2, f_ice0[NVOLATILE];
     unsigned int nChunk = 100;//ceil(nNodes/iNthreads)+1;
-    dr1 = NodeVec[0].Dis3d(NodeVec[iNplayer]);
+    dr1 = NodeVec[0].Dis3d(NodeVec[iNplayer]); //surface to layer 1 distance
     dr2 = NodeVec[iNplayer].Dis3d(NodeVec[iNplayer+iNplayer]);
     for ( ii = 0; ii < NVOLATILE; ii++  )
         f_ice0[ii] = NodeVec[0].f_ice(ii);

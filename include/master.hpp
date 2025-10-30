@@ -41,6 +41,11 @@ class Master {  /* control all master information and process */
         unsigned int OutInterval() const {return _nOutInterval;}
         unsigned int CurrentStep() const {return iStep;}
 
+        unsigned long NNodes() const {return nNodes;}
+        //get node vec const/non const
+        const std::vector<fdmnode>& GetNodeVec() const {return NodeVec;}
+        std::vector<fdmnode>& GetNodeVec() {return NodeVec;}
+
         /* Parameter initialization */
         bool ParaInit(double df_input, double dr1, double dr2, const double (&df_ice0)[NVOLATILE] );
     
