@@ -98,10 +98,4 @@ void print_particle(int rank, int bound_num, fdmnode * particle);
 void print_lookup_tables(local_data_t * data);
 void print_local_lookup_table(local_data_t * data);
 
-//Lukas implementation:
-
-//One master per rank,
-//rank 0 gets all inital file information using Master::initSystem
-//broadcast happens populating the S.
-
 #endif // split_hpp

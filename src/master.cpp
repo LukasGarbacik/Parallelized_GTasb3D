@@ -5,7 +5,7 @@
 #include "split.hpp"
 #include <map>
 #include <dirent.h>
-
+#include <iostream>
 // Global pointer to per-rank local data (declared in split.hpp)
 local_data_t *g_data = nullptr;
 
@@ -1005,12 +1005,13 @@ void Master::Output() {
     ss << std::setw(_nDigits) << std::setfill('0') << iStep;
     // include rank in filename so each MPI rank writes its own output
     filename = achOutName + "rank" + std::to_string(g_data ? g_data->mpi->mpirank : 0) + "." + ss.str();
-    filename.insert(0,"result/box_8/");
+    filename.insert(0,"result/");
     foutput.open( filename.c_str(), ios::out | ios::binary );
     ftemp = (double) dTimeCurrent;
     foutput.write( (char*) &ftemp, sizeof(double) );
     ftemp = (double) bPara.oEle.df;
     foutput.write( (char*) &ftemp, sizeof(double) );
+    std::cout << "size of localnodes: " << g_data->local_nodes.size() << std::endl;
     for (auto &kv : g_data->local_nodes) {
         fdmnode *node = kv.second;
         if (!node) continue;
