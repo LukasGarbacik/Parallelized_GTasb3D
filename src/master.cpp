@@ -1005,13 +1005,27 @@ void Master::Output() {
     ss << std::setw(_nDigits) << std::setfill('0') << iStep;
     // include rank in filename so each MPI rank writes its own output
     filename = achOutName + "rank" + std::to_string(g_data ? g_data->mpi->mpirank : 0) + "." + ss.str();
+
+    if (iStep == 0) {
+        string filename_meta = "result/rank" + std::to_string(g_data ? g_data->mpi->mpirank : 0) + ".meta";
+        std::ofstream fmeta(filename_meta.c_str(), ios::out | ios::binary);
+        int node_size = (int)g_data->local_nodes.size();
+        fmeta.write((char*)&node_size, sizeof(int));
+        for (auto &kv : g_data->local_nodes) {
+            fdmnode *node = kv.second;
+            if (!node) continue;
+            unsigned long nid = node->nID();
+            fmeta.write((char*)&nid, sizeof(unsigned long));
+        }
+        fmeta.close();
+    }
+
     filename.insert(0,"result/");
     foutput.open( filename.c_str(), ios::out | ios::binary );
     ftemp = (double) dTimeCurrent;
     foutput.write( (char*) &ftemp, sizeof(double) );
     ftemp = (double) bPara.oEle.df;
     foutput.write( (char*) &ftemp, sizeof(double) );
-    std::cout << "size of localnodes: " << g_data->local_nodes.size() << std::endl;
     for (auto &kv : g_data->local_nodes) {
         fdmnode *node = kv.second;
         if (!node) continue;

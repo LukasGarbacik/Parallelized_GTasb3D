@@ -194,7 +194,6 @@ void populate_maps(Master * S, local_data_t * data){
         if(!data) exit(1);
         local_bounds.push_back(data->bounds);
     }
-    printf("getting HERE1");
     for(int i =0; i < S->NNodes(); i++){
         fdmnode * node = &S->GetNodeVec()[i];
         if(node->type() < 2) data->needed.push_back(node->nID() + S->GetNplayer());
@@ -530,7 +529,7 @@ int main(int argc, char *argv[]) {
     cout << "GTasb3D running on " << data_ptr->mpi->mpisize << " processors\n" << endl;
 #ifdef SEETIME
     clock_t t0,t1,t2;
-    t0 = clock();
+    t0 = omp_get_wtime();
 #endif
 
     /* Initializing the simulation */
@@ -538,7 +537,6 @@ int main(int argc, char *argv[]) {
         cout << "Error occurred while initializing master." << endl;
         return 1;
     }
-    S.Output();  /* output nodes' information */
     /*
     char debug_output[256];
     snprintf(debug_output, sizeof(debug_output), "debug_output_rank%d", data.mpi->mpirank);
@@ -580,13 +578,15 @@ int main(int argc, char *argv[]) {
 
     sc_MPI_Barrier(data_ptr->mpi->mpicomm);
 
+    S.Output();  /* output nodes' information */
+    
 #ifdef SEETIME
-    t1 = clock();
+    t1 = omp_get_wtime();
     cout << "The input elapsed time: " << (double)(t1-t0) << " s." << endl;
 #endif
 
     cout << "Simulation starts." << endl;
-
+    int debug_iter_count_output = 0;
     while( S.CurrentStep() <= S.TotalSteps() ){
         if ( S.Run() )
             break; /* encounter running error */
@@ -595,9 +595,11 @@ int main(int argc, char *argv[]) {
 
         S.Output();  /* output nodes' information */
 #ifdef SEETIME
-        t2 = clock();
+        t2 = omp_get_wtime();
+        cout << "loop number : " << debug_iter_count_output << endl;
+        debug_iter_count_output++;
         cout<<"The elapsed time for "<<S.OutInterval()<<" runs: "<<(double)(t2-t1)<<" s."<<endl;
-        t1 = clock();
+        t1 = omp_get_wtime();
 #endif
     }
     cout << "Simulation ends." << std::endl;
